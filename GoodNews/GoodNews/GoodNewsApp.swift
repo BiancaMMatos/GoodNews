@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct GoodNewsApp: App {
+    
+    @StateObject private var theme = ThemeManager()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NewsListView()
+                .environment(\.theme, theme)
+                .accentColor(theme.textColor)
         }
     }
 }
