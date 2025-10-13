@@ -11,10 +11,15 @@ import SwiftUI
 struct GoodNewsApp: App {
     
     @StateObject private var theme = ThemeManager()
+    private let factory: ViewModelFactoryProtocol
+    
+    init() {
+        self.factory = ViewModelFactory()
+    }
     
     var body: some Scene {
         WindowGroup {
-            NewsListView()
+            NewsListView(viewModel: factory.makeCategoryViewModel())
                 .environment(\.theme, theme)
                 .accentColor(theme.textColor)
         }

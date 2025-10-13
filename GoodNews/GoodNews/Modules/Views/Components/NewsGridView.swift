@@ -9,17 +9,20 @@ import SwiftUI
 
 struct NewsGridView: View {
     
-    @StateObject private var viewModel = NewsViewModel()
-    
+    @StateObject private var viewModel: NewsViewModel
     private let columns = [
         GridItem(.flexible())
     ]
+    
+    init(viewModel: NewsViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
     
     var body: some View {
         NavigationStack {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 6.0) {
-                    ForEach(NewsItem.mockedItems) { newsItem in
+                    ForEach(Article.mockedArticles) { newsItem in
                         NewsCellView(news: newsItem)
                             .background(Color(.systemBackground))
                             .cornerRadius(12)
@@ -32,5 +35,6 @@ struct NewsGridView: View {
 }
 
 #Preview {
-    NewsGridView()
+    let factory = ViewModelFactory()
+    NewsGridView(viewModel: factory.makeNewsViewModel())
 }
