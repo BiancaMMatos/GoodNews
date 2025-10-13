@@ -19,7 +19,7 @@ struct NewsGridView: View {
         NavigationStack {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 6.0) {
-                    ForEach(NewsItem.mockedItems) { newsItem in
+                    ForEach(Article.mockedArticles) { newsItem in
                         NewsCellView(news: newsItem)
                             .background(Color(.systemBackground))
                             .cornerRadius(12)

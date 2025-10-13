@@ -9,7 +9,7 @@ import SwiftUI
 
 struct NewsCellView: View {
     
-    let news: NewsItem
+    let news: Article
     
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
@@ -20,14 +20,14 @@ struct NewsCellView: View {
                     .lineLimit(2)
                     .foregroundColor(.primary)
                 
-                Text(news.content)
+                Text(news.description ?? "no description")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .lineLimit(3)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             
-            Image(news.imageName)
+            Image(news.imageURL)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 60, height: 60)
@@ -38,5 +38,5 @@ struct NewsCellView: View {
 }
 
 #Preview {
-    NewsCellView(news: NewsItem.mockedItems[3])
+    NewsCellView(news: Article.mockedArticles[3])
 }

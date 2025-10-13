@@ -13,7 +13,7 @@ struct NewsListView: View {
     
     var body: some View {
         NavigationStack {
-            List(NewsItem.mockedItems) { newsItem in
+            List(Article.mockedArticles) { newsItem in
                 NewsCellView(news: newsItem)
             }
             .listStyle(.plain)
@@ -21,7 +21,7 @@ struct NewsListView: View {
             .toolbar {
                 ToolbarItem {
                     Text("NEWS")
-                        .foregroundColor(theme.textColor) // ⭐️ Cor customizada
+                        .foregroundColor(theme.textColor)
                         .font(.largeTitle.weight(.bold))
                 }
             }
