@@ -7,6 +7,7 @@
 
 import Combine
 
-final class NewsViewModel: ObservableObject {
+final class NewsViewModel: ObservableObject {    
+    
     
 }
