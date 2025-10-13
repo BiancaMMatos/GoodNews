@@ -11,13 +11,12 @@ struct NewsSourcesResponse: Decodable {
     let articles: [Article]
 }
 
-
 struct Article: Identifiable, Decodable {
     var id = UUID()
     let title: String
     let description: String?
     let url: String?
-    let imageURL: String
+    let imageURL: String?
     
     enum CodingKeys: String, CodingKey {
         case title
@@ -31,7 +30,7 @@ extension Article {
     
     static func by(_ category: String) -> Resource<[Article]> {
         return Resource<[Article]>(url: URL.urlForTopHeadlines(for: category)) { data in
-            return try!  JSONDecoder().decode(NewsSourcesResponse.self, from: data).articles
+            return try! JSONDecoder().decode(NewsSourcesResponse.self, from: data).articles
         }
     }
     

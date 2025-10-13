@@ -9,11 +9,14 @@ import SwiftUI
 
 struct NewsGridView: View {
     
-    @StateObject private var viewModel = NewsViewModel()
-    
+    @StateObject private var viewModel: NewsViewModel
     private let columns = [
         GridItem(.flexible())
     ]
+    
+    init(viewModel: NewsViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
     
     var body: some View {
         NavigationStack {
@@ -32,5 +35,6 @@ struct NewsGridView: View {
 }
 
 #Preview {
-    NewsGridView()
+    let factory = ViewModelFactory()
+    NewsGridView(viewModel: factory.makeNewsViewModel())
 }

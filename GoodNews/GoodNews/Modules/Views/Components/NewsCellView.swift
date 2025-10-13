@@ -27,7 +27,7 @@ struct NewsCellView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             
-            Image(news.imageURL)
+            Image(news.imageURL ?? "example")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 60, height: 60)

@@ -16,7 +16,7 @@ final class CategoryService: CategoryServiceProtocol {
     
     let repository: NewsRepositoryProtocol
     
-    init(repository: NewsRepositoryProtocol = NewsRepository()) {
+    init(repository: NewsRepositoryProtocol) {
         self.repository = repository
     }
     

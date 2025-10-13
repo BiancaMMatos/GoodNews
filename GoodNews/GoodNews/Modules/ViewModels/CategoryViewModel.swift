@@ -7,10 +7,15 @@
 
 import Combine
 
-
 final class CategoryViewModel: ObservableObject {
     
-    let service = CategoryService()
+    let service: CategoryServiceProtocol
+    @Published var categories: [Category] = []
+    
+    init(service: CategoryServiceProtocol) {
+        self.service = service
+    }
+    
     
     func populateHeadlinesAndArticles() {
         service.getAllHeadlines { categories in

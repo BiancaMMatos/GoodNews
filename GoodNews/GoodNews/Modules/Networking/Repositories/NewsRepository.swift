@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 protocol NewsRepositoryProtocol {
     func fetchNews<T: Decodable>(_ resource: Resource<T>, completion: @escaping (T?) -> ())
 }

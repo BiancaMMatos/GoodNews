@@ -8,16 +8,21 @@
 import SwiftUI
 
 struct NewsListView: View {
-    
     @Environment(\.theme) private var theme
+    @ObservedObject private var viewModel: CategoryViewModel
+
+    init(viewModel: CategoryViewModel) {
+        self._viewModel = ObservedObject(wrappedValue: viewModel)
+    }
     
     var body: some View {
         NavigationStack {
-            List(Article.mockedArticles) { newsItem in
+            List(viewModel.categories.flatMap { $0.articles }) { newsItem in
                 NewsCellView(news: newsItem)
             }
             .listStyle(.plain)
             .background(Gradient(colors: [theme.primaryColor, .white]))
+            .navigationTitle("NEWS")
             .toolbar {
                 ToolbarItem {
                     Text("NEWS")
@@ -25,13 +30,15 @@ struct NewsListView: View {
                         .font(.largeTitle.weight(.bold))
                 }
             }
-            
         }
         .toolbarColorScheme(.dark, for: .navigationBar)
+        .onAppear {
+            viewModel.populateHeadlinesAndArticles()
+        }
     }
-    
 }
 
 #Preview {
-    NewsListView()
+    let factory = ViewModelFactory()
+    NewsListView(viewModel: factory.makeCategoryViewModel())
 }
