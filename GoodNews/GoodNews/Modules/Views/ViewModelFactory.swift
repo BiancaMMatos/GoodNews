@@ -8,9 +8,8 @@
 
 protocol ViewModelFactoryProtocol {
     func makeCategoryViewModel() -> CategoryViewModel
-    func makeNewsViewModel() -> NewsViewModel
+    func makeNewsListViewModel() -> NewsListViewModel
 }
-
 
 final class ViewModelFactory: ViewModelFactoryProtocol {
     
@@ -26,9 +25,9 @@ final class ViewModelFactory: ViewModelFactoryProtocol {
         return CategoryViewModel(service: categoryService)
     }
     
-    func makeNewsViewModel() -> NewsViewModel {
-        return NewsViewModel()
+    func makeNewsListViewModel() -> NewsListViewModel {
+        return NewsListViewModel(categoryService: categoryService)
     }
-    
-    
+ 
 }
+
