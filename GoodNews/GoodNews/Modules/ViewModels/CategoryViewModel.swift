@@ -16,7 +16,6 @@ final class CategoryViewModel: ObservableObject {
         self.service = service
     }
     
-    
     func populateHeadlinesAndArticles() {
         service.getAllHeadlines { categories in
             print(categories)
