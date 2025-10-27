@@ -6,20 +6,24 @@
 //
 
 import Combine
+import Foundation
 
-final class CategoryViewModel: ObservableObject {
+final class CategoryViewModel: Identifiable, ObservableObject {
+    let id = UUID()
+    var title: String
+    private(set) var articles: [Article]
     
-    let service: CategoryServiceProtocol
-    @Published var categories: [Category] = []
+    var articleCount: Int { articles.count }
+    var hasArticles: Bool { !articles.isEmpty }
     
-    init(service: CategoryServiceProtocol) {
-        self.service = service
+    init(title: String, articles: [Article]) {
+        self.title = title
+        self.articles = articles
     }
     
-    func populateHeadlinesAndArticles() {
-        service.getAllHeadlines { categories in
-            print(categories)
-        }
-    }
     
+    func articleViewModels() -> [ArticleViewModel] {
+        return articles.map { ArticleViewModel($0) }
+    }
+
 }

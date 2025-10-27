@@ -9,11 +9,20 @@ import Combine
 import Foundation
 
 final class NewsListViewModel: ObservableObject {
-    @Published private(set) var categories: [Category] = []
+    @Published private(set) var categoryViewModels: [CategoryViewModel] = []
     @Published var isLoading = false
     @Published var error: String?
+    @Published var selectedCategory: String?
     
     private let categoryService: CategoryServiceProtocol
+    
+    var totalArticlesCount: Int {
+        categoryViewModels.reduce(0) { $0 + $1.articleCount }
+    }
+    
+    var availableCategories: [String] {
+        categoryViewModels.map { $0.title }
+    }
     
     init(categoryService: CategoryServiceProtocol) {
         self.categoryService = categoryService
@@ -27,7 +36,9 @@ final class NewsListViewModel: ObservableObject {
         await withCheckedContinuation { continuation in
             categoryService.getAllHeadlines { [weak self] categories in
                 DispatchQueue.main.async {
-                    self?.categories = categories
+                    self?.categoryViewModels = categories.map { category in
+                        CategoryViewModel(title: category.title, articles: category.articles)
+                    }
                     self?.isLoading = false
                     continuation.resume()
                 }
@@ -35,29 +46,4 @@ final class NewsListViewModel: ObservableObject {
         }
     }
     
-    var sectionTitles: [String] {
-        categories.map { $0.title }
-    }
-    
-    func articlesForSection(_ section: Int) -> [ArticleViewModel] {
-        guard section < categories.count else { return [] }
-        return categories[section].articles.map { ArticleViewModel($0) }
-    }
-    
-    func articleViewModelForIndex(section: Int, index: Int) -> ArticleViewModel? {
-        guard section < categories.count,
-              index < categories[section].articles.count else {
-            return nil
-        }
-        return ArticleViewModel(categories[section].articles[index])
-    }
-    
-    func categoryTitle(for section: Int) -> String {
-        guard section < categories.count else { return "" }
-        return categories[section].title
-    }
-    
-    var allArticles: [ArticleViewModel] {
-        categories.flatMap { $0.articles.map { ArticleViewModel($0) } }
-    }
 }

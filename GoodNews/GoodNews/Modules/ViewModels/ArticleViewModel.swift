@@ -5,7 +5,6 @@
 //  Created by Bianca Maciel on 25/10/25.
 //
 
-import Combine
 import Foundation
 
 struct ArticleViewModel: Identifiable {
@@ -28,6 +27,5 @@ struct ArticleViewModel: Identifiable {
     init(_ article: Article) {
         self.article = article
     }
-    
-    
+  
 }
