@@ -80,12 +80,12 @@ struct NewsListView: View {
                             .foregroundStyle(Color.white)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 4)
-                            .background(theme.secondaryColor.opacity(0.3))
+                            .background(theme.primaryColor.opacity(0.3))
                             .cornerRadius(10)
                     }
                     .padding(.vertical, 8)
                     .padding(.horizontal, 16)
-                    .background(theme.secondaryColor)
+                    .background(theme.primaryColor)
                     .cornerRadius(8)
                 }
                 .textCase(nil)

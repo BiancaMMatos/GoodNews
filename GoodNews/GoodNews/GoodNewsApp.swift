@@ -20,7 +20,6 @@ struct GoodNewsApp: App {
         WindowGroup {
             NewsListView(factory: factory)
                 .environment(\.theme, theme)
-                .accentColor(theme.textColor)
         }
     }
 }
