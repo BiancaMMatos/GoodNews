@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct NewsListView: View {
-    @StateObject private var viewModel: NewsListViewModel
+    
     @Environment(\.theme) private var theme
+    @Environment(\.colorScheme) var colorScheme
+    @StateObject private var viewModel: NewsListViewModel
     
     init(factory: ViewModelFactoryProtocol) {
         _viewModel = StateObject(wrappedValue: factory.makeNewsListViewModel())
@@ -30,21 +32,25 @@ struct NewsListView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Text("\(viewModel.totalArticlesCount) articles")
                         .font(.caption)
-                        .foregroundColor(theme.textColor)
+                        .foregroundStyle(colorScheme == .dark ? .white : .black)
                 }
             }
             .task {
                 await loadData()
             }
         }
-        .toolbarColorScheme(.dark, for: .navigationBar)
     }
     
     private var listView: some View {
         List {
+            Text(Date(), style: .date)
+                .padding(.vertical, 8)
+                .padding(.horizontal, 16)
+                .foregroundStyle(colorScheme == .dark ? .white : .black)
+                .cornerRadius(8)
+            
             ForEach(viewModel.categoryViewModels) { categoryVM in
                 Section {
-                    Text(Date(), style: .date)
                     ForEach(categoryVM.articleViewModels()) { articleVM in
                         NewsCellView(articleVM: articleVM)
                             .listRowSeparator(.hidden)
@@ -54,28 +60,27 @@ struct NewsListView: View {
                     HStack {
                         Text(categoryVM.title)
                             .font(.headline)
-                            .foregroundColor(theme.textColor)
+                            .foregroundStyle(Color.white)
                         
                         Spacer()
                         
                         Text("\(categoryVM.articleCount)")
                             .font(.caption)
-                            .foregroundColor(theme.textColor.opacity(0.8))
+                            .foregroundStyle(Color.white)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 4)
-                            .background(theme.primaryColor.opacity(0.3))
+                            .background(theme.secondaryColor.opacity(0.3))
                             .cornerRadius(10)
                     }
                     .padding(.vertical, 8)
                     .padding(.horizontal, 16)
-                    .background(theme.primaryColor)
+                    .background(theme.secondaryColor)
                     .cornerRadius(8)
                 }
                 .textCase(nil)
             }
         }
         .listStyle(.grouped)
-        .background(Gradient(colors: [theme.primaryColor.opacity(0.1), .clear]))
     }
     
     private func loadData() async {
