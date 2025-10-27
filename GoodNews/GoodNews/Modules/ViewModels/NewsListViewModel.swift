@@ -12,7 +12,7 @@ final class NewsListViewModel: ObservableObject {
     @Published private(set) var categoryViewModels: [CategoryViewModel] = []
     @Published var isLoading = false
     @Published var error: String?
-    @Published var selectedCategory: String?
+    @Published var selectedCategory: String? = nil
     
     private let categoryService: CategoryServiceProtocol
     
@@ -23,6 +23,15 @@ final class NewsListViewModel: ObservableObject {
     var availableCategories: [String] {
         categoryViewModels.map { $0.title }
     }
+    
+    var filteredCategoryViewModels: [CategoryViewModel] {
+        if let selectedCategory = selectedCategory {
+            return categoryViewModels.filter { $0.title == selectedCategory }
+        } else {
+            return categoryViewModels
+        }
+    }
+    
     
     init(categoryService: CategoryServiceProtocol) {
         self.categoryService = categoryService

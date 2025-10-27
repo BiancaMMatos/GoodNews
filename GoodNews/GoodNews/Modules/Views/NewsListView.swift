@@ -29,12 +29,23 @@ struct NewsListView: View {
             }
             .navigationTitle("NEWS")
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Picker("Category", selection: $viewModel.selectedCategory) {
+                        Text("All").tag(String?.none)
+                        ForEach(viewModel.categoryViewModels, id: \.title) { categoryVM in
+                            Text(categoryVM.title).tag(Optional(categoryVM.title))
+                        }
+                    }
+                    .pickerStyle(.menu)
+                }
+                
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Text("\(viewModel.totalArticlesCount) articles")
                         .font(.caption)
                         .foregroundStyle(colorScheme == .dark ? .white : .black)
                 }
             }
+
             .task {
                 await loadData()
             }
@@ -49,7 +60,7 @@ struct NewsListView: View {
                 .foregroundStyle(colorScheme == .dark ? .white : .black)
                 .cornerRadius(8)
             
-            ForEach(viewModel.categoryViewModels) { categoryVM in
+            ForEach(viewModel.filteredCategoryViewModels) { categoryVM in
                 Section {
                     ForEach(categoryVM.articleViewModels()) { articleVM in
                         NewsCellView(articleVM: articleVM)
@@ -59,7 +70,7 @@ struct NewsListView: View {
                 } header: {
                     HStack {
                         Text(categoryVM.title)
-                            .font(.headline)
+                            .font(.title)
                             .foregroundStyle(Color.white)
                         
                         Spacer()
