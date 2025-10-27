@@ -38,7 +38,7 @@ struct NewsCellView: View {
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                         case .failure:
-                            Image(systemName: "mockedImage")
+                            Image(systemName: "newspaper")
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .foregroundColor(.gray)
