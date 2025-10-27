@@ -7,7 +7,6 @@
 
 
 protocol ViewModelFactoryProtocol {
-    func makeCategoryViewModel() -> CategoryViewModel
     func makeNewsListViewModel() -> NewsListViewModel
 }
 
@@ -19,10 +18,6 @@ final class ViewModelFactory: ViewModelFactoryProtocol {
     init(newsRepository: NewsRepositoryProtocol = NewsRepository(), categoryService: CategoryServiceProtocol? = nil) {
         self.newsRepository = newsRepository
         self.categoryService = categoryService ?? CategoryService(repository: newsRepository)
-    }
-    
-    func makeCategoryViewModel() -> CategoryViewModel {
-        return CategoryViewModel(service: categoryService)
     }
     
     func makeNewsListViewModel() -> NewsListViewModel {
