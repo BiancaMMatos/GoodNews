@@ -9,7 +9,6 @@ import SwiftUI
 
 @main
 struct GoodNewsApp: App {
-    
     @StateObject private var theme = ThemeManager()
     private let factory: ViewModelFactoryProtocol
     
@@ -19,7 +18,7 @@ struct GoodNewsApp: App {
     
     var body: some Scene {
         WindowGroup {
-            NewsListView(viewModel: factory.makeCategoryViewModel())
+            NewsListView(factory: factory)
                 .environment(\.theme, theme)
                 .accentColor(theme.textColor)
         }

@@ -2,7 +2,7 @@
 //  ThemeEnvironmentKey.swift
 //  GoodNews
 //
-//  Created by Bianca Maciel on 23/09/25.
+//  Created by Bianca Maciel on 26/10/25.
 //
 
 import SwiftUI
