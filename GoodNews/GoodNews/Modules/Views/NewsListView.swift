@@ -11,6 +11,7 @@ struct NewsListView: View {
     
     @Environment(\.theme) private var theme
     @Environment(\.colorScheme) var colorScheme
+    @State private var selectedURL: String?
     @StateObject private var viewModel: NewsListViewModel
     
     init(factory: ViewModelFactoryProtocol) {
@@ -25,6 +26,14 @@ struct NewsListView: View {
                         .scaleEffect(1.5)
                 } else {
                     listView
+                        .sheet(isPresented: Binding(
+                            get: { selectedURL != nil },
+                            set: { newValue in
+                                if !newValue { selectedURL = nil }
+                            }
+                        )) {
+                            NewsWebView(url: selectedURL)
+                        }
                 }
             }
             .navigationTitle("NEWS")
@@ -62,8 +71,14 @@ struct NewsListView: View {
             
             ForEach(viewModel.filteredCategoryViewModels) { categoryVM in
                 Section {
-                    ForEach(categoryVM.articleViewModels()) { articleVM in
+                    ForEach(categoryVM.articleViewModels(), id: \.id) { articleVM in
                         NewsCellView(articleVM: articleVM)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                if let url = articleVM.article.url {
+                                    selectedURL = url
+                                }
+                            }
                             .listRowSeparator(.hidden)
                             .listRowBackground(Color.clear)
                     }
