@@ -8,23 +8,24 @@
 import Foundation
 
 protocol NewsRepositoryProtocol {
-    func fetchNews<T: Decodable>(_ resource: Resource<T>, completion: @escaping (T?) -> ())
+    func fetchNews<T: Decodable>(_ resource: Resource<T>, completion: @escaping (Result<T?, NewsError>) -> Void)
 }
 
 
 final class NewsRepository: NewsRepositoryProtocol {
     
-    func fetchNews<T: Decodable>(_ resource: Resource<T>, completion: @escaping (T?) -> ()) {
+    func fetchNews<T: Decodable>(_ resource: Resource<T>, completion: @escaping (Result<T?, NewsError>) -> Void) {
         URLSession.shared.dataTask(with: resource.url) { data, response, error in
             
-            if let error {
-                print("Error fetching news: \(error.localizedDescription)")
-                completion(nil)
+            if let error = error as? NewsError {
+                print("🚨 Error fetching news: \(error.message)")
+                
+                completion(.failure(error))
             }
             
             if let data {
                 DispatchQueue.main.async {
-                    completion(resource.parse(data))
+                    completion(.success(resource.parse(data)))
                 }
             }
         }

@@ -8,9 +8,8 @@
 import Foundation
 
 protocol CategoryServiceProtocol {
-    func getAllHeadlines(completion: @escaping ([Category]) -> ())
+    func getAllHeadlines(completion: @escaping (Result<[Category], NewsError>) -> ())
 }
-
 
 final class CategoryService: CategoryServiceProtocol {
     
@@ -20,25 +19,31 @@ final class CategoryService: CategoryServiceProtocol {
         self.repository = repository
     }
     
-    func getAllHeadlines(completion: @escaping ([Category]) -> ()) {
+    func getAllHeadlines(completion: @escaping (Result<[Category], NewsError>) -> ()) {
         
         var categories = [Category]()
         var requestCount = 0
-        let categoriesCount = Category.all().count
+        let categoriesList = Category.all()
+        let categoriesCount = categoriesList.count
         
-        Category.all().forEach { category in
-            repository.fetchNews(Article.by(category)) { articles in
-                
+        categoriesList.forEach { category in
+            repository.fetchNews(Article.by(category)) { (result: Result<[Article]?, NewsError>) in
                 requestCount += 1
                 
-                guard let articles = articles else { return }
-                
-                let category = Category(title: category, articles: articles)
-                categories.append(category)
+                switch result {
+                case .success(let articlesOpt):
+                    let articles = articlesOpt ?? []
+                    let category = Category(title: category, articles: articles)
+                    categories.append(category)
+                    
+                case .failure(let error):
+                    let newsError = NewsError(status: error.status, code: error.code, message: error.message)
+                    completion(.failure(newsError))
+                }
                 
                 if requestCount == categoriesCount {
                     DispatchQueue.main.async {
-                        completion(categories)
+                        completion(.success(categories))
                     }
                 }
             }
