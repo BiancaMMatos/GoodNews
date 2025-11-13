@@ -11,7 +11,6 @@ protocol CategoryServiceProtocol {
     func getAllHeadlines(completion: @escaping ([Category]) -> ())
 }
 
-
 final class CategoryService: CategoryServiceProtocol {
     
     let repository: NewsRepositoryProtocol
@@ -24,17 +23,23 @@ final class CategoryService: CategoryServiceProtocol {
         
         var categories = [Category]()
         var requestCount = 0
-        let categoriesCount = Category.all().count
+        let categoriesList = Category.all()
+        let categoriesCount = categoriesList.count
         
-        Category.all().forEach { category in
-            repository.fetchNews(Article.by(category)) { articles in
-                
+        categoriesList.forEach { category in
+            repository.fetchNews(Article.by(category)) { (result: Result<[Article]?, NewsError>) in
                 requestCount += 1
                 
-                guard let articles = articles else { return }
-                
-                let category = Category(title: category, articles: articles)
-                categories.append(category)
+                switch result {
+                case .success(let articlesOpt):
+                    let articles = articlesOpt ?? []
+                    let category = Category(title: category, articles: articles)
+                    categories.append(category)
+                    
+                case .failure(let error):
+                    let newsError = NewsError(status: error.status, code: error.code, message: error.message)
+                    print("Failed to fetch \(category): \(newsError.status), \(newsError.code) - \(newsError.message)")
+                }
                 
                 if requestCount == categoriesCount {
                     DispatchQueue.main.async {
