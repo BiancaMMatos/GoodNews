@@ -34,6 +34,12 @@ struct NewsListView: View {
                         )) {
                             NewsWebView(url: selectedURL)
                         }
+                    
+                        .alert("Error trying to load news", isPresented: $viewModel.showAlertError, presenting: viewModel.newsError) { _ in
+                            Button("OK", role: .cancel) {}
+                        } message: { newsError in
+                            Text(newsError.message)
+                        }
                 }
             }
             .navigationTitle("NEWS")
@@ -118,3 +124,4 @@ struct NewsListView: View {
     let factory = ViewModelFactory()
     NewsListView(factory: factory)
 }
+

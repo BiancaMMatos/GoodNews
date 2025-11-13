@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct NewsError: Error {
+struct NewsError: Error, Identifiable {
+    let id = UUID()
     let status: String
     let code: String
     let message: String

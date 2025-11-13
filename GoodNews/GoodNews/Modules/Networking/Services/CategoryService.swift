@@ -8,7 +8,7 @@
 import Foundation
 
 protocol CategoryServiceProtocol {
-    func getAllHeadlines(completion: @escaping ([Category]) -> ())
+    func getAllHeadlines(completion: @escaping (Result<[Category], NewsError>) -> ())
 }
 
 final class CategoryService: CategoryServiceProtocol {
@@ -19,7 +19,7 @@ final class CategoryService: CategoryServiceProtocol {
         self.repository = repository
     }
     
-    func getAllHeadlines(completion: @escaping ([Category]) -> ()) {
+    func getAllHeadlines(completion: @escaping (Result<[Category], NewsError>) -> ()) {
         
         var categories = [Category]()
         var requestCount = 0
@@ -38,12 +38,12 @@ final class CategoryService: CategoryServiceProtocol {
                     
                 case .failure(let error):
                     let newsError = NewsError(status: error.status, code: error.code, message: error.message)
-                    print("Failed to fetch \(category): \(newsError.status), \(newsError.code) - \(newsError.message)")
+                    completion(.failure(newsError))
                 }
                 
                 if requestCount == categoriesCount {
                     DispatchQueue.main.async {
-                        completion(categories)
+                        completion(.success(categories))
                     }
                 }
             }
