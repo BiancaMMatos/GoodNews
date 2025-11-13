@@ -18,7 +18,7 @@ final class NewsRepository: NewsRepositoryProtocol {
         URLSession.shared.dataTask(with: resource.url) { data, response, error in
             
             if let error = error as? NewsError {
-                print("Error fetching news: \(error.message)")
+                print("🚨 Error fetching news: \(error.message)")
                 
                 completion(.failure(error))
             }
