@@ -22,10 +22,6 @@ final class NewsListViewModel: ObservableObject {
         categoryViewModels.reduce(0) { $0 + $1.articleCount }
     }
     
-    var availableCategories: [String] {
-        categoryViewModels.map { $0.title }
-    }
-    
     var filteredCategoryViewModels: [CategoryViewModel] {
         if let selectedCategory = selectedCategory {
             return categoryViewModels.filter { $0.title == selectedCategory }

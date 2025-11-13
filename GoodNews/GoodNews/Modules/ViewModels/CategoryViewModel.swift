@@ -14,7 +14,6 @@ final class CategoryViewModel: Identifiable, ObservableObject {
     private(set) var articles: [Article]
     
     var articleCount: Int { articles.count }
-    var hasArticles: Bool { !articles.isEmpty }
     
     init(title: String, articles: [Article]) {
         self.title = title
